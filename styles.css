@@ -917,6 +917,21 @@ h2 {
     gap: 8px;
   }
 
+  .result-card {
+    min-height: auto;
+    padding: 22px;
+  }
+
+  .result-card.endurance {
+    background:
+      linear-gradient(135deg, rgba(255, 8, 0, 0.22), transparent 48%),
+      var(--black-2);
+  }
+
+  .result-row p {
+    overflow-wrap: anywhere;
+  }
+
   .team-chief {
     padding: 20px;
   }
