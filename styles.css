@@ -26,6 +26,19 @@ body {
   overflow-x: hidden;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 8, 0, 0.13), transparent 24%),
+    radial-gradient(circle at 82% 70%, rgba(255, 255, 255, 0.06), transparent 22%);
+  opacity: 0.72;
+  animation: ambientShift 16s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -41,6 +54,8 @@ a {
   justify-content: space-between;
   padding: 0 clamp(16px, 5vw, 54px);
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.86), rgba(0, 0, 0, 0.22));
+  backdrop-filter: blur(14px);
+  animation: headerDrop 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .brand {
@@ -60,6 +75,12 @@ a {
   background: var(--red);
   overflow: hidden;
   box-shadow: 0 0 0 1px var(--red-dark), 0 0 28px rgba(242, 13, 13, 0.35);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.brand:hover .brand-badge {
+  transform: rotate(-6deg) scale(1.06);
+  box-shadow: 0 0 0 1px var(--red), 0 0 38px rgba(242, 13, 13, 0.58);
 }
 
 .brand-badge img {
@@ -101,11 +122,30 @@ a {
 }
 
 .nav a {
+  position: relative;
   transition: color 0.2s ease;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 1px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.28s ease;
 }
 
 .nav a:hover {
   color: var(--red);
+}
+
+.nav a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .menu-button {
@@ -170,6 +210,7 @@ a {
     radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px),
     radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px);
   background-size: 7px 7px, 11px 11px;
+  animation: noiseDrift 10s steps(6) infinite;
   pointer-events: none;
 }
 
@@ -218,7 +259,7 @@ a {
   background: var(--red);
   color: #070707;
   border: 8px solid #130202;
-  overflow: hidden;
+  overflow: visible;
   box-shadow:
     0 0 0 1px var(--red),
     0 0 0 10px rgba(242, 13, 13, 0.12),
@@ -228,11 +269,43 @@ a {
   animation: softPulse 4.8s ease-in-out infinite;
 }
 
+.hero-logo::before,
+.hero-logo::after {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-logo::before {
+  z-index: -1;
+  background:
+    conic-gradient(from 0deg, transparent 0 58%, rgba(255, 8, 0, 0.96) 64%, transparent 72% 100%),
+    radial-gradient(circle, transparent 58%, rgba(255, 8, 0, 0.42) 59% 62%, transparent 64%);
+  filter: drop-shadow(0 0 16px rgba(255, 8, 0, 0.56));
+  animation: logoOrbit 5.8s linear infinite;
+}
+
+.hero-logo::after {
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(115deg, transparent 0 38%, rgba(255, 255, 255, 0.2) 48%, transparent 58% 100%),
+    radial-gradient(circle at 50% 50%, transparent 58%, rgba(255, 255, 255, 0.12) 59%, transparent 64%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: logoSweep 3.6s ease-in-out infinite;
+}
+
 .hero-logo img {
+  position: relative;
+  z-index: 0;
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
+  border-radius: 50%;
   transform: scale(1.06);
 }
 
@@ -241,6 +314,7 @@ a {
   z-index: 2;
   align-self: start;
   margin-top: 6vh;
+  animation: heroContentIn 1s 0.18s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .kicker {
@@ -301,6 +375,8 @@ h1 {
 }
 
 .button {
+  position: relative;
+  overflow: hidden;
   min-height: 48px;
   display: inline-flex;
   align-items: center;
@@ -311,12 +387,25 @@ h1 {
   font-size: 12px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  transition: transform 0.24s ease, background 0.24s ease, color 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 0 32%, rgba(255, 255, 255, 0.26) 48%, transparent 64% 100%);
+  transform: translateX(-130%);
+  transition: transform 0.55s ease;
 }
 
 .button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: 0 0 28px rgba(255, 8, 0, 0.18);
+}
+
+.button:hover::before {
+  transform: translateX(130%);
 }
 
 .button-primary {
@@ -579,7 +668,8 @@ h2 {
 .pilot-card:hover,
 .sponsors article:hover {
   border-color: rgba(255, 8, 0, 0.55);
-  transform: translateY(-3px);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34), 0 0 32px rgba(255, 8, 0, 0.08);
 }
 
 .member-card::after {
@@ -788,10 +878,70 @@ h2 {
   z-index: 1;
 }
 
+.dashboard article,
+.copy-panel,
+.result-card,
+.member-card,
+.team-chief,
+.pilot-card,
+.sponsors article,
+.sponsor-cta,
+.contact {
+  transition:
+    opacity 0.75s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
     transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ambientShift {
+  from {
+    transform: translate3d(-1.5%, -1%, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(1.5%, 1%, 0) scale(1.04);
+  }
+}
+
+@keyframes headerDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroContentIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
   }
 
   to {
@@ -811,6 +961,25 @@ h2 {
   }
 }
 
+@keyframes noiseDrift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  25% {
+    transform: translate3d(-1%, 1%, 0);
+  }
+
+  50% {
+    transform: translate3d(1%, -1%, 0);
+  }
+
+  75% {
+    transform: translate3d(1%, 1%, 0);
+  }
+}
+
 @keyframes softPulse {
   0%,
   100% {
@@ -825,6 +994,30 @@ h2 {
       0 0 0 1px var(--red),
       0 0 0 12px rgba(242, 13, 13, 0.16),
       0 0 80px rgba(242, 13, 13, 0.5);
+  }
+}
+
+@keyframes logoOrbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes logoSweep {
+  0%,
+  34%,
+  100% {
+    opacity: 0;
+    transform: translateX(-34%) rotate(0deg);
+  }
+
+  48% {
+    opacity: 0.8;
+  }
+
+  68% {
+    opacity: 0;
+    transform: translateX(34%) rotate(0deg);
   }
 }
 
